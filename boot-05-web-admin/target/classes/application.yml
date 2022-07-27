@@ -1,0 +1,84 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/     #prefix：指定模板所在的目录
+    check-template-location: true     #check-template-location: 检查模板路径是否存在
+    cache: false    #cache: 是否缓存，开发模式下设置为false，避免改了模板还要重启服务器，线上设置为true，可以提高性能。
+    suffix: .html
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    mode: HTML
+
+  boot:
+    admin:
+      client:
+        url: http://localhost:8888        #填写当前客户端需将内容提交给谁
+
+  datasource:
+    url: jdbc:mysql://192.168.127.128:3306/atguigudb
+    username: root
+    password: mysqlpsw
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    druid:
+      aop-patterns: com.example.admin.*
+      filters: stat,wall
+
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: admin
+
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+
+      filter:
+        stat:
+          slow-sql-millis: 1000
+          log-slow-sql: true
+          enabled: true
+        wall:
+          config:
+            drop-table-allow: false
+          enabled: true
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+#配置 Mybatis 规则
+#mybatis:
+##  config-location: classpath:mybatis/mybatis-config.xml
+#  mapper-locations: classpath:mybatis/mapper/*.xml
+#  configuration:
+#    map-underscore-to-camel-case: true
+
+  #配置 redis
+  redis:
+    url: redis://:abc123@192.168.127.128:6379
+    client-type: jedis
+    jedis:
+      pool:
+        max-active: 10
+        max-idle: 5
+
+
+# management 是 actuator 的配置
+management:
+  endpoints:
+    enabled-by-default: true        #默认开启所有监控端点
+    web:
+      exposure:
+        include: '*'          #以 web 形式暴露所有端点
+  # 具体配置某个端点
+  endpoint:
+    health:
+      show-details: always
+#      enabled: true
+#    info:
+#      enabled: true
+#    metrics:
+#      enabled: true
